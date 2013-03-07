@@ -12,6 +12,92 @@ module Plupload
       %))
     end
     
+    def simple_p(options = {})
+       options[:s3_config_filename] ||= "#{Rails.root}/config/amazon_s3.yml"
+       config = YAML.load_file(options[:s3_config_filename])[Rails.env].symbolize_keys
+       bucket = config[:bucket_name]
+       access_key_id = config[:access_key_id]
+       secret_access_key = config[:secret_access_key]
+
+       options[:key] ||= 'test' # folder on AWS to store file in
+       options[:acl] ||= 'public-read'
+       options[:expiration_date] ||= 10.hours.from_now.utc.iso8601
+       options[:max_filesize] ||= 500.megabytes
+       options[:content_type] ||= 'image/' # Videos would be binary/octet-stream
+       options[:filter_title] ||= 'Images'
+       options[:filter_extentions] ||= 'jpg,jpeg,gif,png,bmp'
+
+       id = options[:id] ? "_#{options[:id]}" : ''
+
+       policy = Base64.encode64(
+         "{'expiration': '#{options[:expiration_date]}',
+           'conditions': [
+             {'bucket': '#{bucket}'},
+             {'acl': '#{options[:acl]}'},
+             {'success_action_status': '201'},
+             ['content-length-range', 0, #{options[:max_filesize]}],
+             ['starts-with', '$key', ''],
+             ['starts-with', '$Content-Type', ''],
+             ['starts-with', '$name', ''],
+             ['starts-with', '$Filename', '']
+           ]
+           }").gsub(/\n|\r/, '')
+
+       signature = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha1'),secret_access_key, policy)).gsub("\n","")
+       out = ""
+       filters = "filters : [
+         {title : '#{options[:filter_title]}', extensions : '#{options[:filter_extentions]}'}
+       ],"
+       if options[:filters]
+         filters = 'filters : ['
+         filters = filters + options[:filters].join(',')
+         filters = filters + "],"
+       end
+       out << javascript_tag("
+       function pad(n) { return ('0' + n).slice(-2); }
+       function get_time_stamp() {
+         var d = new Date();
+         return( pad(d.getYear())+''+pad(d.getMonth()+1)+''+pad(d.getDate())+'-'+pad(d.getHours())+''+pad(d.getMinutes())+''+pad(d.getSeconds()) );
+       };
+       $(function() {
+         uploader = new plupload.Uploader({
+           browse_button : 'pickfiles',
+           container : 'uploadcontainer',
+           runtimes : 'flash,silverlight',
+           url : 'http://#{bucket}.s3.amazonaws.com/',
+           max_file_size : '10mb',
+           multipart: true,
+           multipart_params: {
+             'key': '#{options[:key]}/${filename}',
+             'Filename': '${filename}', // adding this to keep consistency across the runtimes
+             'acl': '#{options[:acl]}',
+             'Content-Type': '#{options[:content_type]}',
+             'success_action_status': '201',
+             'AWSAccessKeyId' : '#{access_key_id}',
+             'policy': '#{policy}',
+             'signature': '#{signature}'
+           },
+           // optional, but better be specified directly
+           file_data_name: 'file',
+           // re-use widget (not related to S3, but to Plupload UI Widget)
+           multiple_queues: true,
+           // Specify what files to browse for
+           #{filters}
+           // Flash settings
+           flash_swf_url : '/assets/plupload/js/plupload.flash.swf',
+           // Silverlight settings
+           silverlight_xap_url : '/assets/plupload/js/plupload.silverlight.xap',
+
+
+           // Add randomness to the filename.
+           preinit : {UploadFile: function(up, file) {
+             up.settings.multipart_params.key = up.settings.multipart_params.key.replace(/\\/[^\\/]*\\${filename}/, '/'+get_time_stamp()+'-${filename}')
+           }}
+         });
+       });")
+     raw(out);
+     end
+    
   
     
   end

@@ -16,6 +16,15 @@ Or install it yourself as:
 
     $ gem install plupload
 
+## Getting Started
+
+After you add the gem to your Gemfile, you need to run this generator:
+	
+	$ rails generate plupload_initializer
+
+The generator will create an initializer with your Amazon S3 account details.
+
+
 ## Usage
 
 TODO: Write usage instructions here

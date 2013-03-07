@@ -1,1 +1,3 @@
-//= require_tree
+//= require ./plupload
+//= require ./plupload.flash.js
+//= require ./plupload.silverlight.js
