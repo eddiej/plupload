@@ -13,12 +13,12 @@ module Plupload
     end
     
     def simple_p(options = {})
-       options[:s3_config_filename] ||= "#{Rails.root}/config/amazon_s3.yml"
-       config = YAML.load_file(options[:s3_config_filename])[Rails.env].symbolize_keys
-       bucket = config[:bucket_name]
-       access_key_id = config[:access_key_id]
-       secret_access_key = config[:secret_access_key]
-
+       
+       # Read in the default bucket, AWS key and secret from environment variables.
+       bucket = ENV['S3_BUCKET']
+       access_key_id = ENV['AWS_KEY']
+       secret_access_key = ENV['AWS_SECRET']
+       
        options[:key] ||= 'test' # folder on AWS to store file in
        options[:acl] ||= 'public-read'
        options[:expiration_date] ||= 10.hours.from_now.utc.iso8601
@@ -84,9 +84,9 @@ module Plupload
            // Specify what files to browse for
            #{filters}
            // Flash settings
-           flash_swf_url : '/assets/plupload/js/plupload.flash.swf',
+           flash_swf_url : '/assets/plupload/plupload.flash.swf',
            // Silverlight settings
-           silverlight_xap_url : '/assets/plupload/js/plupload.silverlight.xap',
+           silverlight_xap_url : '/assets/plupload/plupload.silverlight.xap',
 
 
            // Add randomness to the filename.
