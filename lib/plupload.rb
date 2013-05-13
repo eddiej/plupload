@@ -63,7 +63,7 @@ module Plupload
          uploader = new plupload.Uploader({
            browse_button : 'pickfiles',
            container : 'uploadcontainer',
-           runtimes : 'flash,silverlight',
+           runtimes : 'html5',
            url : 'http://#{bucket}.s3.amazonaws.com/',
            max_file_size : '10mb',
            multipart: true,

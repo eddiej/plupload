@@ -17,7 +17,13 @@ Or install it yourself as:
     $ gem install plupload
 
 ## Getting Started
+Now:
+Add the following key/value pairs to your .env file:
+bucket_name: images.domain.com
+access_key_id: XXX
+secret_access_key: XXX
 
+Previously:
 After you add the gem to your Gemfile, you need to run this generator:
 	
 	$ rails generate plupload_initializer

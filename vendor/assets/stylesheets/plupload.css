@@ -13,4 +13,13 @@
  *= require 'jquery.ui.plupload'
 */
 
-body {background:red !important;}
+
+.plupload_header{display:none;}
+.plupload_container{padding:0px !important;}
+#filelist .file {position:relative;border:1px solid #777;padding:4px;}
+span.progbar {display:block;background:#ccc;width:0%;position:absolute;top:0px;left:0px;height:100%;z-index:0;}
+span.filedetails {position:relative;z-index:1;}
+span#deleteupload, span#processingupload, span#finishedupload {display:block;position:absolute;right:0px;top:0px;height:100%;width:30px;text-indent:-9999px;background:white;;z-index:1;}
+span#deleteupload {background:white url('jquery.plupload.queue/delete.gif') center center no-repeat;}
+span#processingupload {background:white url('jquery.plupload.queue/throbber.gif') center center no-repeat; z-index:2;}
+span#finishedupload {background:white url('jquery.plupload.queue/done.gif') center center no-repeat; z-index:2;}
