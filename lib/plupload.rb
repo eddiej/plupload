@@ -16,8 +16,8 @@ module Plupload
        
        # Read in the default bucket, AWS key and secret from environment variables.
        bucket = ENV['S3_BUCKET']
-       access_key_id = ENV['AWS_KEY']
-       secret_access_key = ENV['AWS_SECRET']
+       access_key_id = ENV['AWS_ACCESS_KEY_ID']
+       secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
        
        options[:key] ||= 'test' # folder on AWS to store file in
        options[:acl] ||= 'public-read'
