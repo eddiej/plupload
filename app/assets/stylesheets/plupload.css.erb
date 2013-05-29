@@ -1,16 +1,12 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * This is a manifest file that'll be compiled into plupload.css, which will include all the files
  * listed below.
  *
  * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
  * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
  *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require 'jquery.plupload.queue'
- *= require 'jquery.ui.plupload'
 */
 
 
@@ -20,6 +16,6 @@
 span.progbar {display:block;background:#ccc;width:0%;position:absolute;top:0px;left:0px;height:100%;z-index:0;}
 span.filedetails {position:relative;z-index:1;}
 span#deleteupload, span#processingupload, span#finishedupload {display:block;position:absolute;right:0px;top:0px;height:100%;width:30px;text-indent:-9999px;background:white;;z-index:1;}
-span#deleteupload {background:white url('jquery.plupload.queue/delete.gif') center center no-repeat;}
-span#processingupload {background:white url('jquery.plupload.queue/throbber.gif') center center no-repeat; z-index:2;}
-span#finishedupload {background:white url('jquery.plupload.queue/done.gif') center center no-repeat; z-index:2;}
+span#deleteupload {background:white url(<%= image_path('plupload/jquery.plupload.queue/delete.gif') %>) center center no-repeat;}
+span#processingupload {background:white url(<%= image_path('plupload/jquery.plupload.queue/throbber.gif') %>) center center no-repeat; z-index:2;}
+span#finishedupload {background:white url(<%= image_path('plupload/jquery.plupload.queue/done.gif') %>) center center no-repeat; z-index:2;}
