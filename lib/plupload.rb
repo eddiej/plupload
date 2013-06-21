@@ -54,11 +54,12 @@ module Plupload
          filters = filters + "],"
        end
        out << javascript_tag("
-       function pad(n) { return ('0' + n).slice(-2); }
-       function get_time_stamp() {
-         var d = new Date();
-         return( pad(d.getYear())+''+pad(d.getMonth()+1)+''+pad(d.getDate())+'-'+pad(d.getHours())+''+pad(d.getMinutes())+''+pad(d.getSeconds()) );
-       };
+       // function pad(n) { return ('0' + n).slice(-2); }
+       // function get_time_stamp() {
+       // var d = new Date();
+       //   return( pad(d.getYear())+''+pad(d.getMonth()+1)+''+pad(d.getDate())+'-'+pad(d.getHours())+''+pad(d.getMinutes())+''+pad(d.getSeconds()) );
+       // };
+       
        $(function() {
          uploader = new plupload.Uploader({
            browse_button : 'pickfiles',
@@ -90,9 +91,10 @@ module Plupload
 
 
            // Add randomness to the filename.
-           preinit : {UploadFile: function(up, file) {
-             up.settings.multipart_params.key = up.settings.multipart_params.key.replace(/\\/[^\\/]*\\${filename}/, '/'+get_time_stamp()+'-${filename}')
-           }}
+           // Dont do this, rather upload the file into a user subdirectory
+           // preinit : {UploadFile: function(up, file) {
+           //  up.settings.multipart_params.key = up.settings.multipart_params.key.replace(/\\/[^\\/]*\\${filename}/, '/'+get_time_stamp()+'-${filename}')
+           // }}
          });
        });")
      raw(out);
