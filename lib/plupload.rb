@@ -65,7 +65,7 @@ module Plupload
            browse_button : 'pickfiles',
            container : 'uploadcontainer',
            runtimes : 'html5,flash,silverlight',
-           url : '//#{bucket}.s3.amazonaws.com/',
+           url : '//s3.amazonaws.com/#{bucket}/',
            max_file_size : '#{number_to_human_size(options[:max_filesize]).gsub(/ /,'').downcase}',
            multipart: true,
            multipart_params: {
